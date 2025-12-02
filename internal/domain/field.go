@@ -148,6 +148,11 @@ func (cf *CustomField) IsDerived() bool {
 
 // DerivedField represents a field whose value is computed from other fields.
 // For MVP, this primarily supports the has-label() DSL condition.
+//
+// IMPORTANT: DerivedField instances MUST be created using NewDerivedField.
+// Direct struct instantiation is not supported and will cause panics in methods
+// that dereference CustomField. The CustomField pointer must never be nil during
+// the lifetime of a DerivedField instance.
 type DerivedField struct {
 	// CustomField is the underlying field configuration
 	CustomField *CustomField
@@ -163,6 +168,9 @@ type DerivedField struct {
 }
 
 // NewDerivedField creates a new DerivedField from a CustomField.
+// Returns nil if the provided CustomField is nil. This is the only supported
+// way to create DerivedField instances - direct struct instantiation will
+// result in nil pointer panics.
 func NewDerivedField(cf *CustomField) *DerivedField {
 	if cf == nil {
 		return nil
