@@ -10,6 +10,12 @@ import (
 
 // Service handles synchronization use cases between Jira and local storage.
 // It orchestrates the synchronization logic using domain entities and repository interfaces.
+//
+// TODO: Add Jira client abstraction (interface) to avoid tight coupling to infrastructure.
+// The service should inject a JiraClient interface defined in the application layer.
+//
+// Error contract: Methods return domain.ErrNotFound when resources don't exist,
+// domain.ErrUnauthorized for auth failures, and wrapped errors for other infra issues.
 type Service struct {
 	ticketRepo  repository.TicketRepository
 	commentRepo repository.CommentRepository

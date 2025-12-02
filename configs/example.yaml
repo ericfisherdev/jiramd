@@ -1,5 +1,8 @@
 # jiramd example configuration
 # Copy this file to ~/.config/jiramd/config.yaml and customize
+#
+# NOTE: Environment variable expansion (${VAR}) and home directory expansion (~)
+# are performed by the config loader. Ensure JIRAMD_API_TOKEN is set in your environment.
 
 jira:
   base_url: "https://example.atlassian.net"

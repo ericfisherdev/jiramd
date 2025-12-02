@@ -4,6 +4,7 @@ package file
 
 import (
 	"context"
+	"errors"
 )
 
 // Watcher monitors file system changes.
@@ -20,12 +21,12 @@ func NewWatcher() *Watcher {
 // This is a placeholder for the actual implementation.
 func (w *Watcher) Watch(ctx context.Context, dir string) (<-chan string, error) {
 	// TODO: Implement file watching using fsnotify
-	return nil, nil
+	return nil, errors.New("file.Watcher.Watch not implemented")
 }
 
 // Close closes the file watcher.
 // This is a placeholder for the actual implementation.
 func (w *Watcher) Close() error {
 	// TODO: Implement cleanup logic
-	return nil
+	return errors.New("file.Watcher.Close not implemented")
 }

@@ -4,6 +4,7 @@ package field
 
 import (
 	"context"
+	"errors"
 )
 
 // Service handles field mapping use cases.
@@ -21,12 +22,12 @@ func NewService() *Service {
 // This is a placeholder for the actual implementation.
 func (s *Service) GetMapping(ctx context.Context, projectKey string) (map[string]string, error) {
 	// TODO: Implement field mapping retrieval
-	return nil, nil
+	return nil, errors.New("field.Service.GetMapping not implemented")
 }
 
 // SetMapping sets the field mapping for a project.
 // This is a placeholder for the actual implementation.
 func (s *Service) SetMapping(ctx context.Context, projectKey string, mapping map[string]string) error {
 	// TODO: Implement field mapping storage
-	return nil
+	return errors.New("field.Service.SetMapping not implemented")
 }

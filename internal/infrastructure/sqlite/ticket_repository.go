@@ -4,6 +4,7 @@ package sqlite
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/esfisher/jiramd/internal/domain"
 	"github.com/esfisher/jiramd/internal/domain/repository"
@@ -26,7 +27,7 @@ var _ repository.TicketRepository = (*TicketRepository)(nil)
 // This is a placeholder for the actual implementation.
 func (r *TicketRepository) Save(ctx context.Context, ticket *domain.Ticket) error {
 	// TODO: Implement SQLite save logic
-	return nil
+	return fmt.Errorf("sqlite.TicketRepository.Save not implemented")
 }
 
 // FindByKey retrieves a ticket by its key from SQLite.
@@ -40,19 +41,19 @@ func (r *TicketRepository) FindByKey(ctx context.Context, key string) (*domain.T
 // This is a placeholder for the actual implementation.
 func (r *TicketRepository) FindAll(ctx context.Context) ([]*domain.Ticket, error) {
 	// TODO: Implement SQLite query logic
-	return nil, nil
+	return nil, fmt.Errorf("sqlite.TicketRepository.FindAll not implemented")
 }
 
 // Delete removes a ticket from SQLite storage.
 // This is a placeholder for the actual implementation.
 func (r *TicketRepository) Delete(ctx context.Context, key string) error {
 	// TODO: Implement SQLite delete logic
-	return nil
+	return fmt.Errorf("sqlite.TicketRepository.Delete not implemented")
 }
 
 // Update updates an existing ticket in SQLite.
 // This is a placeholder for the actual implementation.
 func (r *TicketRepository) Update(ctx context.Context, ticket *domain.Ticket) error {
 	// TODO: Implement SQLite update logic
-	return nil
+	return fmt.Errorf("sqlite.TicketRepository.Update not implemented")
 }

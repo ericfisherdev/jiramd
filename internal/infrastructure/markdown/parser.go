@@ -4,6 +4,7 @@ package markdown
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/esfisher/jiramd/internal/domain"
 )
@@ -22,12 +23,12 @@ func NewParser() *Parser {
 // This is a placeholder for the actual implementation.
 func (p *Parser) ParseTicket(ctx context.Context, content []byte) (*domain.Ticket, error) {
 	// TODO: Implement markdown parsing logic
-	return nil, nil
+	return nil, fmt.Errorf("markdown.Parser.ParseTicket not implemented")
 }
 
 // GenerateTicket generates a markdown file from a Ticket entity.
 // This is a placeholder for the actual implementation.
 func (p *Parser) GenerateTicket(ctx context.Context, ticket *domain.Ticket) ([]byte, error) {
 	// TODO: Implement markdown generation logic
-	return nil, nil
+	return nil, fmt.Errorf("markdown.Parser.GenerateTicket not implemented")
 }

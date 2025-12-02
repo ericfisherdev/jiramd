@@ -3,6 +3,7 @@
 package config
 
 import (
+	"errors"
 	"time"
 )
 
@@ -55,12 +56,12 @@ type StorageConfig struct {
 // This is a placeholder for the actual implementation.
 func Load(path string) (*Config, error) {
 	// TODO: Implement YAML config loading
-	return nil, nil
+	return nil, errors.New("config.Load not implemented")
 }
 
 // Validate validates the configuration.
 // This is a placeholder for the actual implementation.
 func (c *Config) Validate() error {
 	// TODO: Implement validation logic
-	return nil
+	return errors.New("config.Validate not implemented")
 }

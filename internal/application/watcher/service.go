@@ -8,6 +8,10 @@ import (
 
 // Service handles file system watching use cases.
 // It monitors markdown file changes and triggers appropriate synchronization.
+//
+// TODO: Follow dependency injection pattern - update NewService to accept and store
+// dependencies (file.Watcher interface, sync service) rather than constructing them internally.
+// Document Watch/Stop semantics (idempotency, error handling, context cancellation).
 type Service struct {
 	// TODO: Add dependencies for file watching and sync triggering
 }

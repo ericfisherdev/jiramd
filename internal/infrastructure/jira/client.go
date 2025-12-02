@@ -10,6 +10,10 @@ import (
 
 // Client represents a Jira API client.
 // It implements communication with Jira Cloud REST API.
+//
+// TODO: Inject http.Client (or interface) and logger via NewClient for better testability
+// and control over timeouts/retries. Map HTTP status codes to domain errors (404 -> ErrNotFound,
+// 401/403 -> ErrUnauthorized).
 type Client struct {
 	baseURL string
 	email   string

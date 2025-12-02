@@ -17,12 +17,15 @@ type Ticket struct {
 	Description string
 
 	// Status represents the current ticket status (e.g., "To Do", "In Progress", "Done")
+	// TODO: Consider using a typed Status enum with validation
 	Status string
 
 	// IssueType is the type of ticket (e.g., "Story", "Bug", "Task")
+	// TODO: Consider using a typed IssueType enum with validation
 	IssueType string
 
 	// Priority is the ticket priority (e.g., "High", "Medium", "Low")
+	// TODO: Consider using a typed Priority enum with validation
 	Priority string
 
 	// Assignee is the user assigned to the ticket
@@ -38,6 +41,7 @@ type Ticket struct {
 	Updated time.Time
 
 	// Fields contains custom field values
+	// TODO: Consider replacing map[string]interface{} with typed field container for better type safety
 	Fields map[string]interface{}
 }
 
