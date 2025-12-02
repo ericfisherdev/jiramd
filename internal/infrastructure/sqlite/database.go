@@ -62,7 +62,7 @@ func NewDatabase(config DatabaseConfig, logger *slog.Logger) (*Database, error) 
 	}
 
 	// Build connection string with pragmas
-	connStr := fmt.Sprintf("file:%s?_busy_timeout=%d&_journal_mode=WAL&_synchronous=NORMAL&_foreign_keys=ON",
+	connStr := fmt.Sprintf("file:%s?_pragma=busy_timeout(%d)&_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=foreign_keys(ON)",
 		config.Path,
 		int(config.BusyTimeout.Milliseconds()),
 	)
