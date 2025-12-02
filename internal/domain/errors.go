@@ -17,4 +17,22 @@ var (
 
 	// ErrUnauthorized indicates lack of authorization
 	ErrUnauthorized = errors.New("unauthorized")
+
+	// ErrConfig indicates a configuration error
+	ErrConfig = errors.New("configuration error")
 )
+
+// ConfigError represents a configuration-specific error with details.
+type ConfigError struct {
+	Message string
+}
+
+// Error implements the error interface.
+func (e *ConfigError) Error() string {
+	return e.Message
+}
+
+// NewConfigError creates a new ConfigError.
+func NewConfigError(message string) error {
+	return &ConfigError{Message: message}
+}
