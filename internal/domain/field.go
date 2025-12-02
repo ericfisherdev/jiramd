@@ -46,7 +46,7 @@ func (fv FieldValue) String() string {
 	return fmt.Sprintf("%v", fv.raw)
 }
 
-// IsZero returns true if the field value is nil or empty.
+// IsZero returns true if the field value is nil.
 func (fv FieldValue) IsZero() bool {
 	return fv.raw == nil
 }
@@ -158,6 +158,9 @@ type DerivedField struct {
 
 // NewDerivedField creates a new DerivedField from a CustomField.
 func NewDerivedField(cf *CustomField) *DerivedField {
+	if cf == nil {
+		return nil
+	}
 	return &DerivedField{
 		CustomField:  cf,
 		UsedDefault:  false,

@@ -216,7 +216,9 @@ func NewSyncResult(ticketKey TicketKey) *SyncResult {
 // MarkFailed marks the sync result as failed with an error.
 func (sr *SyncResult) MarkFailed(err error) {
 	sr.Success = false
-	sr.Error = err.Error()
+	if err != nil {
+		sr.Error = err.Error()
+	}
 }
 
 // MarkConflict marks the sync result as having a conflict.
