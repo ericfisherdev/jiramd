@@ -4,6 +4,7 @@ package jira
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/esfisher/jiramd/internal/domain"
 )
@@ -33,19 +34,19 @@ func NewClient(baseURL, email, token string) *Client {
 // This is a placeholder for the actual implementation.
 func (c *Client) GetTicket(ctx context.Context, key string) (*domain.Ticket, error) {
 	// TODO: Implement Jira API call to get ticket
-	return nil, nil
+	return nil, fmt.Errorf("jira.Client.GetTicket not implemented")
 }
 
 // UpdateTicket updates a ticket in Jira.
 // This is a placeholder for the actual implementation.
 func (c *Client) UpdateTicket(ctx context.Context, ticket *domain.Ticket) error {
 	// TODO: Implement Jira API call to update ticket
-	return nil
+	return fmt.Errorf("jira.Client.UpdateTicket not implemented")
 }
 
 // GetProject retrieves a project from Jira.
 // This is a placeholder for the actual implementation.
 func (c *Client) GetProject(ctx context.Context, key string) (*domain.Project, error) {
 	// TODO: Implement Jira API call to get project
-	return nil, nil
+	return nil, fmt.Errorf("jira.Client.GetProject not implemented")
 }

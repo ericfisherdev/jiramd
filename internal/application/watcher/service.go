@@ -4,6 +4,7 @@ package watcher
 
 import (
 	"context"
+	"errors"
 )
 
 // Service handles file system watching use cases.
@@ -25,12 +26,12 @@ func NewService() *Service {
 // This is a placeholder for the actual implementation.
 func (s *Service) Watch(ctx context.Context, dir string) error {
 	// TODO: Implement file watching logic
-	return nil
+	return errors.New("watcher.Service.Watch not implemented")
 }
 
 // Stop stops the file watcher.
 // This is a placeholder for the actual implementation.
 func (s *Service) Stop() error {
 	// TODO: Implement stop logic
-	return nil
+	return errors.New("watcher.Service.Stop not implemented")
 }
