@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
@@ -185,10 +186,9 @@ func TestLoader_Load_FileNotFound(t *testing.T) {
 
 	// Verify it's a ConfigError
 	var configErr *domain.ConfigError
-	if !isConfigError(err) {
+	if !errors.As(err, &configErr) {
 		t.Errorf("Load() error type = %T, want *domain.ConfigError", err)
 	}
-	_ = configErr // Avoid unused variable error
 }
 
 func TestLoader_Load_InvalidYAML(t *testing.T) {

@@ -102,6 +102,11 @@ func expandHomePath(path string) (string, error) {
 		return homeDir, nil
 	}
 
+	// Only expand ~/path, not ~username/path
+	if !strings.HasPrefix(path, "~/") {
+		return "", fmt.Errorf("unsupported path format: %s (only ~/ is supported)", path)
+	}
+
 	return filepath.Join(homeDir, path[2:]), nil
 }
 
