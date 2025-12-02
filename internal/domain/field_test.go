@@ -176,6 +176,36 @@ func TestCustomField_ValidateValue(t *testing.T) {
 			value:       "DEV1",
 			wantErr:     true,
 		},
+		{
+			name:        "value with leading whitespace",
+			validValues: []string{"dev1", "dev2", "dev3"},
+			value:       "  dev2",
+			wantErr:     false,
+		},
+		{
+			name:        "value with trailing whitespace",
+			validValues: []string{"dev1", "dev2", "dev3"},
+			value:       "dev2  ",
+			wantErr:     false,
+		},
+		{
+			name:        "value with both leading and trailing whitespace",
+			validValues: []string{"dev1", "dev2", "dev3"},
+			value:       "  dev2  ",
+			wantErr:     false,
+		},
+		{
+			name:        "valid entry with whitespace",
+			validValues: []string{"dev1", "  dev2  ", "dev3"},
+			value:       "dev2",
+			wantErr:     false,
+		},
+		{
+			name:        "both value and valid have whitespace",
+			validValues: []string{"dev1", "  dev2  ", "dev3"},
+			value:       "  dev2  ",
+			wantErr:     false,
+		},
 	}
 
 	for _, tt := range tests {
