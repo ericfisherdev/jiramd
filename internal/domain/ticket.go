@@ -7,12 +7,14 @@ import (
 	"encoding/hex"
 	"fmt"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 )
 
 // ticketKeyPattern defines the valid format for Jira ticket keys (PROJECT-123)
-var ticketKeyPattern = regexp.MustCompile(`^[A-Z][A-Z0-9]+-\d+$`)
+// Project key must be 2-10 characters (matching projectKeyPattern constraints)
+var ticketKeyPattern = regexp.MustCompile(`^[A-Z][A-Z0-9]{1,9}-\d+$`)
 
 // TicketKey is a value object representing a valid Jira ticket identifier.
 // It enforces the format: PROJECT-NUMBER (e.g., "JMD-123").
@@ -121,8 +123,16 @@ func (t *Ticket) ContentHash() string {
 	fmt.Fprintf(h, "assignee:%s\n", t.Assignee)
 	fmt.Fprintf(h, "labels:%s\n", strings.Join(t.Labels, ","))
 
+	// Sort custom field keys for deterministic hash
+	keys := make([]string, 0, len(t.CustomFields))
+	for k := range t.CustomFields {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	// Include custom fields in sorted order for deterministic hash
-	for k, v := range t.CustomFields {
+	for _, k := range keys {
+		v := t.CustomFields[k]
 		fmt.Fprintf(h, "custom:%s=%v\n", k, v.Raw())
 	}
 

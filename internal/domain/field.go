@@ -38,7 +38,7 @@ func (fv FieldValue) Raw() interface{} {
 }
 
 // String returns the field value as a string.
-// Returns empty string if value is nil or cannot be converted.
+// Returns empty string if value is nil.
 func (fv FieldValue) String() string {
 	if fv.raw == nil {
 		return ""
