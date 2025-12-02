@@ -5,21 +5,43 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
+var (
+	// version is set at build time using ldflags
+	version = "dev"
+)
+
+// rootCmd represents the base command when called without any subcommands
+var rootCmd = &cobra.Command{
+	Use:   "jiramd",
+	Short: "jiramd - Jira markdown sync daemon",
+	Long: `jiramd is a background daemon that bidirectionally syncs Jira Cloud tickets
+to local markdown files. It eliminates AI token usage for Jira ticket
+management by maintaining a local markdown cache.`,
+	Version: version,
+	// Uncomment the following line if your bare application
+	// has an action associated with it:
+	// Run: func(cmd *cobra.Command, args []string) { },
+}
+
 func main() {
-	if err := run(); err != nil {
+	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 }
 
-// run is the main application logic.
-// This is a placeholder for the actual implementation.
-func run() error {
-	// TODO: Implement CLI command routing
-	// TODO: Wire up dependencies (repositories, services, etc.)
-	// TODO: Handle commands: serve, sync, project, field, status
-	fmt.Println("jiramd - Jira markdown sync daemon")
-	return nil
+func init() {
+	// Register subcommands
+	rootCmd.AddCommand(serveCmd)
+	rootCmd.AddCommand(syncCmd)
+	rootCmd.AddCommand(projectCmd)
+	rootCmd.AddCommand(fieldCmd)
+	rootCmd.AddCommand(statusCmd)
+
+	// Global flags can be added here if needed
+	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.jiramd.yaml)")
 }
