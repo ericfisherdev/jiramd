@@ -118,19 +118,22 @@ func (cf *CustomField) Validate() error {
 
 // ValidateValue checks if a value is in the ValidValues whitelist.
 // Returns nil if ValidValues is empty (no validation) or if value is in the list.
+// Both the input value and valid entries are trimmed before comparison.
 func (cf *CustomField) ValidateValue(value string) error {
 	if len(cf.ValidValues) == 0 {
 		return nil // No validation required
 	}
 
+	trimmedValue := strings.TrimSpace(value)
+
 	for _, valid := range cf.ValidValues {
-		if value == valid {
+		if trimmedValue == strings.TrimSpace(valid) {
 			return nil
 		}
 	}
 
 	return fmt.Errorf("%w: value '%s' not in valid values for field '%s': %v",
-		ErrInvalidFieldValue, value, cf.Name, cf.ValidValues)
+		ErrInvalidFieldValue, trimmedValue, cf.Name, cf.ValidValues)
 }
 
 // IsBidirectional returns true if this field syncs in both directions.

@@ -1,19 +1,44 @@
 # jiramd example configuration
 # Copy this file to ~/.config/jiramd/config.yaml and customize
 #
-# NOTE: Environment variable expansion (${VAR}) and home directory expansion (~)
-# are performed by the config loader. Ensure JIRAMD_API_TOKEN is set in your environment.
+# SECURITY NOTE:
+# - NEVER commit your actual API token to version control
+# - Always use environment variables for sensitive credentials
+# - The ${VAR} syntax enables environment variable expansion
+# - The ~ character is expanded to your home directory
+#
+# ENVIRONMENT VARIABLES:
+# Required:
+#   JIRAMD_API_TOKEN - Your Jira API token (generate at: https://id.atlassian.com/manage/api-tokens)
+#
+# Optional (can override YAML values):
+#   JIRAMD_BASE_URL  - Jira instance URL
+#   JIRAMD_EMAIL     - Your Jira user email
+#   JIRAMD_PROJECT   - Jira project key to sync
 
 jira:
+  # Base URL of your Jira instance (MUST use https://)
   base_url: "https://example.atlassian.net"
+
+  # Your Jira user email address
   email: "user@example.com"
-  token: "${JIRAMD_API_TOKEN}"  # Use environment variable
+
+  # API token for authentication (use environment variable for security)
+  token: "${JIRAMD_API_TOKEN}"
+
+  # Jira project key to sync (2-10 uppercase characters)
   project: "JMD"
 
 sync:
+  # Sync interval (examples: 30s, 5m, 1h)
   interval: 5m
+
+  # Directory to store markdown files (~ expands to home directory)
   markdown_dir: "~/jira-tickets"
+
+  # Enable file system watching for real-time sync
   watch_enabled: true
 
 storage:
+  # SQLite database file path (~ expands to home directory)
   db_path: "~/.local/share/jiramd/jiramd.db"

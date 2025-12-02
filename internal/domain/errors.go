@@ -19,6 +19,9 @@ var (
 	// ErrUnauthorized indicates lack of authorization
 	ErrUnauthorized = errors.New("unauthorized")
 
+	// ErrConfig indicates a configuration error
+	ErrConfig = errors.New("configuration error")
+
 	// ErrInvalidTicketKey indicates a ticket key does not match expected format
 	ErrInvalidTicketKey = errors.New("invalid ticket key format")
 
@@ -40,3 +43,18 @@ var (
 	// ErrInvalidOperation indicates an invalid pending operation type
 	ErrInvalidOperation = errors.New("invalid operation type")
 )
+
+// ConfigError represents a configuration-specific error with details.
+type ConfigError struct {
+	Message string
+}
+
+// Error implements the error interface.
+func (e *ConfigError) Error() string {
+	return e.Message
+}
+
+// NewConfigError creates a new ConfigError.
+func NewConfigError(message string) error {
+	return &ConfigError{Message: message}
+}

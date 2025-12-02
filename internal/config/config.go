@@ -1,67 +1,34 @@
 // Package config handles application configuration loading and validation.
-// This layer depends only on domain and standard library.
+// This package provides a convenient wrapper around the infrastructure config implementation.
 package config
 
 import (
-	"errors"
-	"time"
+	"github.com/esfisher/jiramd/internal/domain"
+	infraConfig "github.com/esfisher/jiramd/internal/infrastructure/config"
 )
 
-// Config represents the application configuration.
-type Config struct {
-	// Jira configuration
-	Jira JiraConfig `yaml:"jira"`
+// Load loads and validates configuration from a YAML file.
+// This is a convenience function that uses the infrastructure implementation.
+// It performs the following operations:
+// 1. Loads configuration from YAML file
+// 2. Expands environment variables
+// 3. Validates configuration
+// Returns domain.Config and error if loading or validation fails.
+func Load(path string) (*domain.Config, error) {
+	// Create loader and validator
+	loader := infraConfig.NewLoader()
+	validator := infraConfig.NewValidator()
 
-	// Sync configuration
-	Sync SyncConfig `yaml:"sync"`
+	// Load configuration
+	cfg, err := loader.Load(path)
+	if err != nil {
+		return nil, err
+	}
 
-	// Storage configuration
-	Storage StorageConfig `yaml:"storage"`
-}
+	// Validate configuration
+	if err := validator.Validate(cfg); err != nil {
+		return nil, err
+	}
 
-// JiraConfig contains Jira-specific configuration.
-type JiraConfig struct {
-	// BaseURL is the Jira instance base URL (e.g., "https://example.atlassian.net")
-	BaseURL string `yaml:"base_url"`
-
-	// Email is the Jira user email for authentication
-	Email string `yaml:"email"`
-
-	// Token is the Jira API token (should be loaded from environment)
-	Token string `yaml:"token"`
-
-	// Project is the Jira project key to sync
-	Project string `yaml:"project"`
-}
-
-// SyncConfig contains synchronization-specific configuration.
-type SyncConfig struct {
-	// Interval is the sync interval duration
-	Interval time.Duration `yaml:"interval"`
-
-	// MarkdownDir is the directory containing markdown files
-	MarkdownDir string `yaml:"markdown_dir"`
-
-	// WatchEnabled enables file system watching
-	WatchEnabled bool `yaml:"watch_enabled"`
-}
-
-// StorageConfig contains storage-specific configuration.
-type StorageConfig struct {
-	// DBPath is the SQLite database file path
-	DBPath string `yaml:"db_path"`
-}
-
-// Load loads configuration from a YAML file.
-// This is a placeholder for the actual implementation.
-func Load(path string) (*Config, error) {
-	// TODO: Implement YAML config loading
-	return nil, errors.New("config.Load not implemented")
-}
-
-// Validate validates the configuration.
-// This is a placeholder for the actual implementation.
-func (c *Config) Validate() error {
-	// TODO: Implement validation logic
-	return errors.New("config.Validate not implemented")
+	return cfg, nil
 }
