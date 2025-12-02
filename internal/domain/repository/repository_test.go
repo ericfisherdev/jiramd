@@ -9,6 +9,9 @@ import (
 	"github.com/esfisher/jiramd/internal/domain/repository"
 )
 
+// txKey is used as a context key for transaction state in tests.
+type txKey struct{}
+
 // TestJiraRepositoryInterface verifies that the JiraRepository interface
 // can be satisfied by a mock implementation and that the interface compiles.
 func TestJiraRepositoryInterface(t *testing.T) {
@@ -45,8 +48,10 @@ func TestJiraRepositoryInterface(t *testing.T) {
 	}
 
 	// Test UpdateTicket
-	if err := mock.UpdateTicket(ctx, ticket); err != nil {
+	if updatedTicket, err := mock.UpdateTicket(ctx, ticket); err != nil {
 		t.Errorf("UpdateTicket failed: %v", err)
+	} else if updatedTicket == nil {
+		t.Error("UpdateTicket returned nil ticket")
 	}
 
 	// Test FetchComments
@@ -142,9 +147,9 @@ func TestMarkdownRepositoryInterface(t *testing.T) {
 		t.Errorf("GenerateIndex failed: %v", err)
 	}
 
-	// Test ParseTemplate
-	if err := mock.ParseTemplate(ctx, "templates/ticket.md.tmpl"); err != nil {
-		t.Errorf("ParseTemplate failed: %v", err)
+	// Test ValidateTemplate
+	if err := mock.ValidateTemplate(ctx, "templates/ticket.md.tmpl"); err != nil {
+		t.Errorf("ValidateTemplate failed: %v", err)
 	}
 }
 
@@ -322,8 +327,8 @@ func (m *mockJiraRepository) FetchAllTickets(ctx context.Context, projectKey str
 	return []*domain.Ticket{}, nil
 }
 
-func (m *mockJiraRepository) UpdateTicket(ctx context.Context, ticket *domain.Ticket) error {
-	return nil
+func (m *mockJiraRepository) UpdateTicket(ctx context.Context, ticket *domain.Ticket) (*domain.Ticket, error) {
+	return ticket, nil
 }
 
 func (m *mockJiraRepository) FetchComments(ctx context.Context, ticketKey string) ([]*domain.Comment, error) {
@@ -369,7 +374,7 @@ func (m *mockMarkdownRepository) GenerateIndex(ctx context.Context, indexPath st
 	return nil
 }
 
-func (m *mockMarkdownRepository) ParseTemplate(ctx context.Context, templatePath string) error {
+func (m *mockMarkdownRepository) ValidateTemplate(ctx context.Context, templatePath string) error {
 	return nil
 }
 
@@ -416,7 +421,7 @@ func (m *mockStateRepository) DeleteProjectState(ctx context.Context, projectKey
 }
 
 func (m *mockStateRepository) BeginTransaction(ctx context.Context) (context.Context, error) {
-	return context.WithValue(ctx, "transaction", true), nil
+	return context.WithValue(ctx, txKey{}, true), nil
 }
 
 func (m *mockStateRepository) Commit(ctx context.Context) error {

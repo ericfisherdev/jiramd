@@ -56,9 +56,10 @@ type MarkdownRepository interface {
 	// Returns ErrInvalidInput if the tickets data is invalid.
 	GenerateIndex(ctx context.Context, indexPath string, tickets []*domain.Ticket) error
 
-	// ParseTemplate parses and validates a markdown template file.
+	// ValidateTemplate validates a markdown template file syntax.
 	// Templates use Go's text/template syntax.
 	// Returns ErrNotFound if the template file doesn't exist.
 	// Returns ErrInvalidInput if the template syntax is invalid.
-	ParseTemplate(ctx context.Context, templatePath string) error
+	// Note: Implementations should cache the parsed template internally for later use.
+	ValidateTemplate(ctx context.Context, templatePath string) error
 }

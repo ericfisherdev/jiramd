@@ -44,10 +44,11 @@ type JiraRepository interface {
 
 	// UpdateTicket pushes local ticket changes to Jira.
 	// Only updates fields that have changed to minimize API calls.
+	// Returns the updated ticket with the authoritative Jira timestamp for version tracking.
 	// Returns ErrNotFound if the ticket no longer exists in Jira.
 	// Returns ErrConflict if the ticket was modified by another user since last fetch.
 	// Returns ErrUnauthorized if the user lacks permission to edit the ticket.
-	UpdateTicket(ctx context.Context, ticket *domain.Ticket) error
+	UpdateTicket(ctx context.Context, ticket *domain.Ticket) (*domain.Ticket, error)
 
 	// FetchComments retrieves all comments for a given ticket.
 	// Returns empty slice if the ticket has no comments.
