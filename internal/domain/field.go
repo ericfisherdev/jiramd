@@ -154,6 +154,9 @@ type DerivedField struct {
 
 	// UsedDefault indicates whether the default value was used
 	UsedDefault bool
+
+	// isEvaluated tracks whether SetMatchedValue or SetDefault has been called
+	isEvaluated bool
 }
 
 // NewDerivedField creates a new DerivedField from a CustomField.
@@ -172,17 +175,22 @@ func NewDerivedField(cf *CustomField) *DerivedField {
 func (df *DerivedField) SetMatchedValue(value string) {
 	df.MatchedValue = value
 	df.UsedDefault = false
+	df.isEvaluated = true
 }
 
 // SetDefault marks that the default value should be used.
 func (df *DerivedField) SetDefault() {
 	df.MatchedValue = df.CustomField.DefaultValue
 	df.UsedDefault = true
+	df.isEvaluated = true
 }
 
 // Value returns the final computed value (either matched or default).
 func (df *DerivedField) Value() string {
-	if df.MatchedValue != "" {
+	if !df.isEvaluated {
+		return df.CustomField.DefaultValue
+	}
+	if !df.UsedDefault {
 		return df.MatchedValue
 	}
 	return df.CustomField.DefaultValue
