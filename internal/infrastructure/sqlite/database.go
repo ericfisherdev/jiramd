@@ -30,8 +30,14 @@ type DatabaseConfig struct {
 
 // DefaultConfig returns the default database configuration.
 func DefaultConfig() DatabaseConfig {
-	homeDir, _ := os.UserHomeDir()
-	defaultPath := filepath.Join(homeDir, ".jiramd", "state.db")
+	homeDir, err := os.UserHomeDir()
+	var defaultPath string
+	if err != nil {
+		// Fallback to current directory if home directory cannot be determined
+		defaultPath = filepath.Join(".jiramd", "state.db")
+	} else {
+		defaultPath = filepath.Join(homeDir, ".jiramd", "state.db")
+	}
 
 	return DatabaseConfig{
 		Path:            defaultPath,
