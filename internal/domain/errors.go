@@ -58,3 +58,13 @@ func (e *ConfigError) Error() string {
 func NewConfigError(message string) error {
 	return &ConfigError{Message: message}
 }
+
+// IsNotFoundError checks if an error is or wraps ErrNotFound.
+func IsNotFoundError(err error) bool {
+	return errors.Is(err, ErrNotFound)
+}
+
+// IsError checks if an error is or wraps a specific domain error.
+func IsError(err, target error) bool {
+	return errors.Is(err, target)
+}
