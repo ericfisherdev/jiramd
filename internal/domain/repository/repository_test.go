@@ -64,8 +64,9 @@ func TestJiraRepositoryInterface(t *testing.T) {
 	}
 
 	// Test AddComment
+	ticketKey, _ := domain.NewTicketKey("JMD-1")
 	comment := &domain.Comment{
-		TicketKey: "JMD-1",
+		TicketKey: ticketKey,
 		Author:    "test",
 		Body:      "test comment",
 	}
@@ -316,7 +317,8 @@ func TestProjectSyncStateStruct(t *testing.T) {
 type mockJiraRepository struct{}
 
 func (m *mockJiraRepository) FetchTicket(ctx context.Context, key string) (*domain.Ticket, error) {
-	return &domain.Ticket{Key: key, Summary: "Test Ticket"}, nil
+	ticketKey, _ := domain.NewTicketKey(key)
+	return &domain.Ticket{Key: ticketKey, Summary: "Test Ticket"}, nil
 }
 
 func (m *mockJiraRepository) FetchTicketsModifiedSince(ctx context.Context, projectKey string, since time.Time) ([]*domain.Ticket, error) {
@@ -351,7 +353,8 @@ func (m *mockJiraRepository) FetchProjects(ctx context.Context) ([]*domain.Proje
 type mockMarkdownRepository struct{}
 
 func (m *mockMarkdownRepository) ReadTicket(ctx context.Context, filePath string) (*domain.Ticket, error) {
-	return &domain.Ticket{Key: "JMD-1", Summary: "Test Ticket"}, nil
+	ticketKey, _ := domain.NewTicketKey("JMD-1")
+	return &domain.Ticket{Key: ticketKey, Summary: "Test Ticket"}, nil
 }
 
 func (m *mockMarkdownRepository) WriteTicket(ctx context.Context, filePath string, ticket *domain.Ticket) error {

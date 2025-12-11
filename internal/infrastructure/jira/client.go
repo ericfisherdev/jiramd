@@ -3,50 +3,52 @@
 package jira
 
 import (
-	"context"
 	"fmt"
+	"log/slog"
 
-	"github.com/esfisher/jiramd/internal/domain"
+	jira "github.com/andygrunwald/go-jira/v2/cloud"
 )
 
 // Client represents a Jira API client.
-// It implements communication with Jira Cloud REST API.
-//
-// TODO: Inject http.Client (or interface) and logger via NewClient for better testability
-// and control over timeouts/retries. Map HTTP status codes to domain errors (404 -> ErrNotFound,
-// 401/403 -> ErrUnauthorized).
+// It wraps the go-jira/v2 client with authentication and provides
+// infrastructure-layer access to Jira Cloud REST API.
 type Client struct {
-	baseURL string
-	email   string
-	token   string
+	jiraClient *jira.Client
+	logger     *slog.Logger
 }
 
-// NewClient creates a new Jira API client.
-func NewClient(baseURL, email, token string) *Client {
-	return &Client{
-		baseURL: baseURL,
-		email:   email,
-		token:   token,
+// NewClient creates a new Jira API client with BasicAuth transport.
+// The baseURL should be the full Jira Cloud URL (e.g., "https://yoursite.atlassian.net").
+// The email is the user's email address and token is the API token from Jira Cloud.
+// Logger is injected for dependency inversion and better testability.
+func NewClient(baseURL, email, token string, logger *slog.Logger) (*Client, error) {
+	if baseURL == "" {
+		return nil, fmt.Errorf("baseURL cannot be empty")
 	}
-}
+	if email == "" {
+		return nil, fmt.Errorf("email cannot be empty")
+	}
+	if token == "" {
+		return nil, fmt.Errorf("token cannot be empty")
+	}
+	if logger == nil {
+		return nil, fmt.Errorf("logger cannot be nil")
+	}
 
-// GetTicket retrieves a ticket from Jira.
-// This is a placeholder for the actual implementation.
-func (c *Client) GetTicket(ctx context.Context, key string) (*domain.Ticket, error) {
-	// TODO: Implement Jira API call to get ticket
-	return nil, fmt.Errorf("jira.Client.GetTicket not implemented")
-}
+	// Create transport with Basic Auth (email + API token)
+	tp := jira.BasicAuthTransport{
+		Username: email,
+		APIToken: token,
+	}
 
-// UpdateTicket updates a ticket in Jira.
-// This is a placeholder for the actual implementation.
-func (c *Client) UpdateTicket(ctx context.Context, ticket *domain.Ticket) error {
-	// TODO: Implement Jira API call to update ticket
-	return fmt.Errorf("jira.Client.UpdateTicket not implemented")
-}
+	// Create the Jira client with the authenticated transport
+	jiraClient, err := jira.NewClient(baseURL, tp.Client())
+	if err != nil {
+		return nil, fmt.Errorf("failed to create jira client: %w", err)
+	}
 
-// GetProject retrieves a project from Jira.
-// This is a placeholder for the actual implementation.
-func (c *Client) GetProject(ctx context.Context, key string) (*domain.Project, error) {
-	// TODO: Implement Jira API call to get project
-	return nil, fmt.Errorf("jira.Client.GetProject not implemented")
+	return &Client{
+		jiraClient: jiraClient,
+		logger:     logger,
+	}, nil
 }
